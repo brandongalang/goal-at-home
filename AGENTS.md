@@ -1,10 +1,10 @@
 # Goal-at-home — agent install guide
 
-Session goal enforcement: agents run `goal set` at the start of sustained work and `goal complete` when done. While a goal is **active**, supported agents cannot end the turn without continuing (via hooks).
+Session goal enforcement requires **all three**: the `goal` CLI, lifecycle **hooks**, and the bundled skill. Instructions alone are not enough — without hooks, the agent can stop without running `goal complete`.
 
 Repository: https://github.com/brandongalang/goal-at-home
 
-## Quick install (Cursor — full enforcement)
+## Install (Cursor)
 
 Run from the repo root (requires `go`, `jq`, and `~/.local/bin` on PATH):
 
@@ -20,20 +20,12 @@ What this installs:
 
 - `~/.local/bin/goal` — CLI
 - `~/.cursor/hooks.json` — merged `preToolUse` + `stop` hooks (existing hooks preserved)
-- `~/.cursor/skills/goal-enforcement/SKILL.md` — skill for the agent
+- `~/.cursor/skills/goal-enforcement/SKILL.md` — skill (installed with the CLI, not separately)
 - `~/.cursor/goals/` — per-session goal state
 
-## Skill-only install (any agent)
+Do **not** install only `SKILL.md` via `npx skills add` or by copying the skill folder. That skips enforcement.
 
-For agents without hook adapters (Antigravity, Pi, OpenCode, Copilot, etc.):
-
-```bash
-npx skills add brandongalang/goal-at-home --skill goal-enforcement -g -y
-```
-
-Or clone this repo and copy `skill/goal-enforcement/SKILL.md` into your agent’s skills folder (see [README.md](./README.md#install-by-agent)).
-
-## Commands (after full install)
+## Commands
 
 In Cursor, do **not** pass `--session-id` — hooks inject it on shell `goal` commands.
 
@@ -57,24 +49,20 @@ goal clear      # user cancelled or goal should be dropped
 3. Do not run `goal complete` early — the stop hook will reprompt until the goal is real.
 4. Casual Q&A does not need `goal set`.
 
-## Agent-specific notes
+## Other agents
 
-| Agent | Full install | Skill only |
-|-------|--------------|------------|
-| Cursor | `./install.sh` | `npx skills add brandongalang/goal-at-home -g -y` |
-| Claude Code | hooks adapter planned | `~/.claude/skills/goal-enforcement/` |
-| Codex | hooks adapter planned | `~/.codex/skills/` or `.agents/skills/` |
-| Gemini CLI | hooks adapter planned | `~/.gemini/skills/` |
-| Antigravity | not supported (no stop hook) | `~/.gemini/antigravity/skills/` |
-| Pi / OpenCode | extension/plugin TBD | `.agents/skills/` or agent-specific path |
+| Agent | Supported? |
+|-------|------------|
+| Cursor | Yes — `./install.sh` |
+| Claude Code, Codex, Gemini CLI | Planned (`goal install` adapters) |
+| Antigravity, Windsurf, Copilot, Pi, OpenCode | No — no stop-hook enforcement yet |
 
-See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md) for the full matrix.
+See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md).
 
-## Verify install (Cursor)
+## Verify install
 
 ```bash
-goal status    # may error outside a session — expected
-which goal     # should be ~/.local/bin/goal
+which goal     # ~/.local/bin/goal
 ```
 
-Set a test goal in an agent shell, stop without completing — you should get a follow-up reprompt. Then `goal complete`.
+In an agent shell: `goal set "test"`, stop without completing — you should get a follow-up reprompt. Then `goal complete`.

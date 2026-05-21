@@ -2,25 +2,20 @@
 name: goal-enforcement
 description: >-
   Session goal enforcement for coding agents. Use when the user asks for sustained
-  work that must not stop until explicitly finished. Requires the goal CLI and
-  hooks (goal-at-home) for hard enforcement; skill-only install is soft guidance.
+  work that must not stop until explicitly finished. Requires goal-at-home CLI and
+  hooks (run ./install.sh); this skill alone does not enforce stopping.
 ---
 
 # Session goal enforcement
 
-This workspace uses **goal-at-home**: the agent should not end sustained work while a goal is **active** unless it runs `goal complete` (when hooks are installed).
+This workspace uses **goal-at-home**: the agent cannot end sustained work while a goal is **active** unless it runs `goal complete`. Enforcement comes from hooks, not this file alone.
+
+If `goal` or hooks are missing, run `./install.sh` from https://github.com/brandongalang/goal-at-home (see AGENTS.md).
 
 ## When to use
 
 - User asks for multi-step work, refactors, migrations, or anything that must run to completion
 - User says to set a goal, use goal enforcement, or not stop until done
-
-## Install
-
-- **Cursor (full):** clone https://github.com/brandongalang/goal-at-home and run `./install.sh`
-- **Other agents (skill only):** `npx skills add brandongalang/goal-at-home --skill goal-enforcement -g -y`
-
-See https://github.com/brandongalang/goal-at-home/blob/main/AGENTS.md
 
 ## Commands
 
@@ -44,7 +39,7 @@ goal clear       # remove the goal without completing (user asked to cancel, or 
 
 ## Rules
 
-- Never say you are finished without running `goal complete` while a goal is active (when hooks are installed).
+- Never say you are finished without running `goal complete` while a goal is active.
 - Do not run `goal complete` to bypass work — the stop hook will keep reprompting until the goal is real.
 - If the user hits Stop, the goal stays active; the next turn should continue toward it.
 - Casual questions without sustained work do not need `goal set`.

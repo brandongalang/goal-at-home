@@ -1,10 +1,10 @@
 # goal-at-home
 
-Session goal enforcement for coding agents. Set a goal at the start of sustained work; the agent cannot end the session until it runs `goal complete` (where hooks are supported).
+Session goal enforcement for coding agents. Set a goal at the start of sustained work; the agent cannot end the session until it runs `goal complete` — enforced by the **CLI + hooks**, not prompts alone.
 
 **Repository:** https://github.com/brandongalang/goal-at-home
 
-Agents: read [AGENTS.md](./AGENTS.md) first for install steps tailored to coding agents.
+Agents: read [AGENTS.md](./AGENTS.md) first.
 
 ## How it works
 
@@ -16,9 +16,9 @@ Agents: read [AGENTS.md](./AGENTS.md) first for install steps tailored to coding
 
 User **Stop** leaves the goal **active** so the next turn resumes enforcement.
 
-## Install
+Installing only a skill file (instructions without the binary and hooks) does **not** provide enforcement — the agent can ignore it. Use the full install below.
 
-### Cursor (full — binary + hooks + skill)
+## Install (Cursor)
 
 Requires `go`, `jq`, and `~/.local/bin` on your `PATH`.
 
@@ -30,29 +30,22 @@ cd goal-at-home
 
 Restart Cursor after install.
 
-### Any agent (skill only — soft guidance)
+This installs:
 
-Uses the [skills.sh](https://skills.sh) ecosystem ([Vercel skills CLI](https://github.com/vercel-labs/skills)):
+- `~/.local/bin/goal` — CLI
+- `~/.cursor/hooks.json` — `preToolUse` + `stop` hooks (existing hooks preserved)
+- `~/.cursor/skills/goal-enforcement/SKILL.md` — agent instructions (bundled with install)
+- `~/.cursor/goals/` — per-session state
 
-```bash
-npx skills add brandongalang/goal-at-home --skill goal-enforcement -g -y
-```
+## Supported agents
 
-This copies the skill into your agent’s skills directory. It does **not** install hooks or the `goal` binary.
+| Agent | Status |
+|-------|--------|
+| **Cursor** | `./install.sh` today |
+| **Claude Code, Codex, Gemini CLI** | Hook adapters planned |
+| **Antigravity, Windsurf, Copilot, Pi, OpenCode, …** | Not supported until we ship an adapter with CLI + stop enforcement |
 
-### Install by agent
-
-| Agent | Full enforcement | Skill path (global) |
-|-------|-------------------|---------------------|
-| **Cursor** | `./install.sh` | `~/.cursor/skills/goal-enforcement/` |
-| **Claude Code** | Planned | `~/.claude/skills/goal-enforcement/` |
-| **Codex** | Planned | `~/.codex/skills/` or `~/.agents/skills/` |
-| **Gemini CLI** | Planned | `~/.gemini/skills/` |
-| **Antigravity** | Not available (no stop hook) | `~/.gemini/antigravity/skills/` |
-| **Windsurf** | Not available | `~/.codeium/windsurf/skills/` |
-| **Pi / OpenCode** | Extension/plugin TBD | `.agents/skills/` |
-
-See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md) for tiers, Pi, OpenCode, and Antigravity details.
+See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md).
 
 ## Commands
 
@@ -77,9 +70,7 @@ Example: [hooks.example.json](./hooks.example.json).
 
 ## Tell your agent
 
-Point it at this repo and ask it to run install:
-
-> Clone https://github.com/brandongalang/goal-at-home and run `./install.sh` for Cursor, or `npx skills add brandongalang/goal-at-home --skill goal-enforcement -g -y` for skill-only. Follow AGENTS.md.
+> Clone https://github.com/brandongalang/goal-at-home, run `./install.sh`, restart Cursor. Follow AGENTS.md. Do not use skill-only install — enforcement requires the CLI and hooks.
 
 Optional Cursor user rule:
 

@@ -8,9 +8,10 @@ import re
 import sys
 from pathlib import Path
 
-# goal-at-home: no Codex 4k cap; keep objectives readable for stop-hook follow-ups.
-DEFAULT_MAX_CHARS = 20_000
-TARGET_CHARS = 5_000
+# Match Codex /goal best practice (same as upstream Goalcraft).
+DEFAULT_MAX_CHARS = 3_999
+TARGET_CHARS = 3_400
+STRICT_WARN_CHARS = 3_800
 
 
 def objective_text(text: str) -> str:
@@ -77,10 +78,17 @@ def main() -> int:
     print(f"target_chars={args.target_chars}")
     print(f"max_chars={args.max_chars}")
     if count > args.max_chars:
-        print("error=objective exceeds goal-at-home max", file=sys.stderr)
+        print("error=objective exceeds /goal character limit (3999)", file=sys.stderr)
         return 1
-    if count > args.target_chars:
-        print("warning=objective exceeds recommended target", file=sys.stderr)
+    if count >= STRICT_WARN_CHARS:
+        print(
+            "warning=objective at or above 3800 chars; compress per Goalcraft practice",
+            file=sys.stderr,
+        )
+        if args.strict_target:
+            return 1
+    elif count > args.target_chars:
+        print("warning=objective exceeds 3400 char target", file=sys.stderr)
         if args.strict_target:
             return 1
     return 0

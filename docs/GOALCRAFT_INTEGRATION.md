@@ -30,12 +30,13 @@ No external Goalcraft install required. No `/goal` prefix. No Codex `create_goal
 
 `./install.sh` copies both skills to `~/.cursor/skills/`.
 
-## Validator defaults (not Codex)
+## Validator limits (same as Codex `/goal`)
 
 | Limit | Chars | Rationale |
 |-------|-------|-----------|
-| Target (strict) | 5,000 | Readable objectives; smaller stop-hook follow-ups |
-| Hard max | 20,000 | Practical storage and UI |
+| Working target | 3,400 | Goalcraft default; keeps objectives operable |
+| Fail draft | ≥ 3,800 | Compress even if under hard cap |
+| Hard max | 3,999 | Matches Codex `/goal` TUI limit |
 
 ```bash
 python3 scripts/validate_goal_objective.py --strict-target /tmp/objective.txt

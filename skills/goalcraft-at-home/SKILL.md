@@ -35,10 +35,12 @@ Upstream inspiration: [grp06/goalcraft](https://github.com/grp06/goalcraft). Thi
    - Done/stop: when to continue autonomously, when to ask, checkpoint rhythm, blockers.
    - Success metric: observable proof of completion.
 
-3. Keep the objective usable by goal-at-home.
+3. Keep the objective within the same limits as Codex `/goal` (Goalcraft best practice).
    - Output is plain text for `goal set "..."` — no `/goal` prefix.
-   - Working target: **5,000 characters** or fewer (readability and hook follow-up size).
-   - Hard limit: **20,000 characters** — compress if longer.
+   - Hard limit: objective text must be **less than 4,000 characters** (count after stripping any `/goal ` prefix).
+   - Working target: **3,400 characters** or fewer.
+   - Treat **3,800 characters or more** as a failed draft even if below the hard limit.
+   - If 3,400–3,799 characters, accept only when removing more text would lose important safety or verification detail; otherwise compress.
    - Make every requirement auditable (files, commands, behavior, artifacts).
    - Include exact commands only when known from the repo or user.
    - For vague or huge work, recommend narrowing scope or a planning pass before `goal set`.
@@ -52,7 +54,9 @@ Upstream inspiration: [grp06/goalcraft](https://github.com/grp06/goalcraft). Thi
    - Write the final objective to a temp file and run the bundled validator from this repo:
      `scripts/validate_goal_objective.py --strict-target /tmp/objective.txt`
    - Resolve the script relative to the **goal-at-home** install (this skill’s repo), not the user project.
-   - Do not return until validation passes.
+   - If over 3,999 characters, compress and revalidate.
+   - If 3,800–3,999 characters, compress and revalidate.
+   - Do not return until validation passes with `--strict-target`.
 
 6. Activation.
    - Default: return **Assumptions** + **Ready for goal set** with the exact quoted string.

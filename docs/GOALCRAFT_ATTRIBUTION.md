@@ -12,8 +12,7 @@ The **goalcraft-at-home** skill and `scripts/validate_goal_objective.py` are ada
 
 | Upstream (Codex) | goal-at-home |
 |------------------|--------------|
-| `/goal …` activation | `goal set "…"` |
-| 3,400 / 3,999 char limits | 5,000 target / 20,000 max |
+| `/goal …` activation | `goal set "…"` (same 3,400 / 3,999 limits) |
 | `create_goal`, thread APIs | Session file + stop hooks |
 | External skill install | Bundled in this repo |
 

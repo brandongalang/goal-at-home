@@ -12,6 +12,10 @@ This workspace uses **goal-at-home**: the agent cannot end sustained work while 
 
 If `goal` or hooks are missing, run `./install.sh` from https://github.com/brandongalang/goal-at-home (see AGENTS.md).
 
+## Before goal set
+
+Use the bundled **goalcraft-at-home** skill to turn the user's brief into a validated objective (Destination, Verification, Done/stop, etc.). Do not `goal set` a vague one-liner unless the user explicitly refuses crafting.
+
 ## When to use
 
 - User asks for multi-step work, refactors, migrations, or anything that must run to completion
@@ -31,11 +35,12 @@ goal clear       # remove the goal without completing (user asked to cancel, or 
 
 ## Workflow
 
-1. At the start of substantive work, run `goal set "..."` with a concrete, verifiable objective.
-2. Do the work. If scope changes, `goal edit "..."`.
-3. Before claiming done, verify against the objective (tests, files, behavior).
-4. Run `goal complete` only when satisfied.
-5. Use `goal clear` only when the user cancels or the goal should be dropped.
+1. **goalcraft-at-home** — craft and validate the objective from the user's brief.
+2. `goal set "..."` — activate enforcement for this session.
+3. Do the work; if scope changes, `goal edit "..."`.
+4. Verify against the objective (tests, files, behavior).
+5. `goal complete` only when satisfied.
+6. `goal clear` only when the user cancels or the goal should be dropped.
 
 ## Rules
 

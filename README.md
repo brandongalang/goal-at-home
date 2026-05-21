@@ -34,7 +34,8 @@ This installs:
 
 - `~/.local/bin/goal` — CLI
 - `~/.cursor/hooks.json` — `preToolUse` + `stop` hooks (existing hooks preserved)
-- `~/.cursor/skills/goal-enforcement/SKILL.md` — agent instructions (bundled with install)
+- `~/.cursor/skills/goalcraft-at-home/SKILL.md` — craft objectives before `goal set`
+- `~/.cursor/skills/goal-enforcement/SKILL.md` — enforce until `goal complete`
 - `~/.cursor/goals/` — per-session state
 
 ## Supported agents
@@ -47,11 +48,11 @@ This installs:
 
 See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md).
 
-## Goalcraft (recommended)
+## Goalcraft at home (bundled)
 
-Use [Goalcraft](https://github.com/grp06/goalcraft) to turn a rough brief into a compact, evidence-based objective before `goal set`. Goal-at-home enforces completion; Goalcraft shapes *what* “done” means.
+This repo includes **goalcraft-at-home** — an adapted [Goalcraft](https://github.com/grp06/goalcraft) workflow for `goal set` (not Codex `/goal`). `./install.sh` installs both **goalcraft-at-home** (shape the objective) and **goal-enforcement** (enforce it).
 
-Planned integration: [docs/GOALCRAFT_INTEGRATION.md](./docs/GOALCRAFT_INTEGRATION.md).
+Details: [docs/GOALCRAFT_INTEGRATION.md](./docs/GOALCRAFT_INTEGRATION.md) · [attribution](./docs/GOALCRAFT_ATTRIBUTION.md)
 
 ## Commands
 

@@ -20,10 +20,18 @@ What this installs:
 
 - `~/.local/bin/goal` — CLI
 - `~/.cursor/hooks.json` — merged `preToolUse` + `stop` hooks (existing hooks preserved)
-- `~/.cursor/skills/goal-enforcement/SKILL.md` — skill (installed with the CLI, not separately)
+- `~/.cursor/skills/goalcraft-at-home/SKILL.md` — craft objectives (adapted Goalcraft)
+- `~/.cursor/skills/goal-enforcement/SKILL.md` — enforce until `goal complete`
 - `~/.cursor/goals/` — per-session goal state
 
-Do **not** install only `SKILL.md` via `npx skills add` or by copying the skill folder. That skips enforcement.
+Do **not** install only skills without `./install.sh` — that skips the CLI and hooks.
+
+## Workflow
+
+1. Use **goalcraft-at-home** to draft a validated objective from the user's brief.
+2. Run `goal set "<objective>"`.
+3. Work until verification criteria are met.
+4. Run `goal complete`.
 
 ## Commands
 

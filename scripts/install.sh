@@ -7,14 +7,16 @@ CURSOR_DIR="${CURSOR_DIR:-$HOME/.cursor}"
 GOALS_DIR="$CURSOR_DIR/goals"
 HOOKS_JSON="$CURSOR_DIR/hooks.json"
 SKILL_DIR="$CURSOR_DIR/skills/goal-enforcement"
+CRAFT_SKILL_DIR="$CURSOR_DIR/skills/goalcraft-at-home"
 
-mkdir -p "$INSTALL_DIR" "$GOALS_DIR" "$SKILL_DIR" "$(dirname "$HOOKS_JSON")"
+mkdir -p "$INSTALL_DIR" "$GOALS_DIR" "$SKILL_DIR" "$CRAFT_SKILL_DIR" "$(dirname "$HOOKS_JSON")"
 
 echo "Building goal binary..."
 (cd "$ROOT" && go build -o "$INSTALL_DIR/goal" .)
 
-echo "Installing skill..."
-cp "$ROOT/skill/SKILL.md" "$SKILL_DIR/SKILL.md"
+echo "Installing skills..."
+cp "$ROOT/skill/goal-enforcement/SKILL.md" "$SKILL_DIR/SKILL.md"
+cp "$ROOT/skill/goalcraft-at-home/SKILL.md" "$CRAFT_SKILL_DIR/SKILL.md"
 
 merge_hooks() {
   local tmp
@@ -62,7 +64,8 @@ echo "Installed:"
 echo "  binary:  $INSTALL_DIR/goal"
 echo "  goals:   $GOALS_DIR/"
 echo "  hooks:   $HOOKS_JSON"
-echo "  skill:   $SKILL_DIR/SKILL.md"
+echo "  skills:  $SKILL_DIR/SKILL.md"
+echo "           $CRAFT_SKILL_DIR/SKILL.md"
 echo ""
 echo "Ensure $INSTALL_DIR is on your PATH."
 echo "Restart Cursor or reload hooks after install."

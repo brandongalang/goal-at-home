@@ -47,6 +47,12 @@ This installs:
 
 See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md).
 
+## Goalcraft (recommended)
+
+Use [Goalcraft](https://github.com/grp06/goalcraft) to turn a rough brief into a compact, evidence-based objective before `goal set`. Goal-at-home enforces completion; Goalcraft shapes *what* “done” means.
+
+Planned integration: [docs/GOALCRAFT_INTEGRATION.md](./docs/GOALCRAFT_INTEGRATION.md).
+
 ## Commands
 
 | Command | Description |

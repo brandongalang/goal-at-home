@@ -8,7 +8,7 @@ import (
 	"regexp"
 	"strings"
 
-	"github.com/brandongalang/cursor-goal/internal/store"
+	"github.com/brandongalang/goal-at-home/internal/store"
 )
 
 type baseInput struct {

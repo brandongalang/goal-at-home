@@ -5,8 +5,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/brandongalang/cursor-goal/internal/hooks"
-	"github.com/brandongalang/cursor-goal/internal/store"
+	"github.com/brandongalang/goal-at-home/internal/hooks"
+	"github.com/brandongalang/goal-at-home/internal/store"
 )
 
 func main() {
@@ -46,7 +46,7 @@ func main() {
 }
 
 func printUsage() {
-	fmt.Fprintf(os.Stderr, `cursor-goal — session goal enforcement for Cursor agents
+	fmt.Fprintf(os.Stderr, `goal-at-home — session goal enforcement for coding agents
 
 Usage:
   goal set    --session-id <id> <objective text>
@@ -54,10 +54,11 @@ Usage:
   goal complete --session-id <id>
   goal clear  --session-id <id>
   goal status --session-id <id>
-  goal hook pre-tool-use   (Cursor preToolUse hook; reads JSON from stdin)
-  goal hook stop           (Cursor stop hook; reads JSON from stdin)
+  goal hook pre-tool-use   (preToolUse hook; reads JSON from stdin)
+  goal hook stop           (stop hook; reads JSON from stdin)
 
-Install: ./scripts/install.sh
+Install: ./install.sh
+Docs:    https://github.com/brandongalang/goal-at-home
 `)
 }
 

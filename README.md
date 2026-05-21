@@ -1,61 +1,89 @@
-# cursor-goal
+# goal-at-home
 
-Session-scoped goal enforcement for [Cursor](https://cursor.com) agents. If the agent sets a goal and tries to stop without running `goal complete`, a `stop` hook auto-reprompts it to continue.
+Session goal enforcement for coding agents. Set a goal at the start of sustained work; the agent cannot end the session until it runs `goal complete` (where hooks are supported).
+
+**Repository:** https://github.com/brandongalang/goal-at-home
+
+Agents: read [AGENTS.md](./AGENTS.md) first for install steps tailored to coding agents.
 
 ## How it works
 
-1. Agent runs `goal set "objective"` (you can instruct Cursor to do this).
-2. A `preToolUse` hook injects `--session-id` so state is tied to the chat.
-3. When the agent loop ends, a `stop` hook checks `~/.cursor/goals/<session-id>.json`.
-4. If status is `active`, Cursor submits a follow-up message (up to `loop_limit`, default 10).
+1. Agent runs `goal set "objective with clear done criteria"`.
+2. A **pre-tool hook** injects `--session-id` so state is tied to the chat.
+3. When the agent loop ends, a **stop hook** checks the session goal file.
+4. If status is `active`, the agent gets a follow-up reprompt (up to `loop_limit`, default 10).
 5. Agent runs `goal complete` when truly done; the next stop is allowed.
 
-User **Stop** leaves the goal **active** so the next message resumes enforcement.
+User **Stop** leaves the goal **active** so the next turn resumes enforcement.
 
 ## Install
 
-```bash
-git clone https://github.com/brandongalang/cursor-goal.git
-cd cursor-goal
-./scripts/install.sh
-```
+### Cursor (full — binary + hooks + skill)
 
 Requires `go`, `jq`, and `~/.local/bin` on your `PATH`.
 
-The installer:
-
-- Builds `goal` to `~/.local/bin/goal`
-- Merges hooks into `~/.cursor/hooks.json` (preserves existing hooks like `rtk`)
-- Installs `~/.cursor/skills/goal-enforcement/SKILL.md`
+```bash
+git clone https://github.com/brandongalang/goal-at-home.git
+cd goal-at-home
+./install.sh
+```
 
 Restart Cursor after install.
+
+### Any agent (skill only — soft guidance)
+
+Uses the [skills.sh](https://skills.sh) ecosystem ([Vercel skills CLI](https://github.com/vercel-labs/skills)):
+
+```bash
+npx skills add brandongalang/goal-at-home --skill goal-enforcement -g -y
+```
+
+This copies the skill into your agent’s skills directory. It does **not** install hooks or the `goal` binary.
+
+### Install by agent
+
+| Agent | Full enforcement | Skill path (global) |
+|-------|-------------------|---------------------|
+| **Cursor** | `./install.sh` | `~/.cursor/skills/goal-enforcement/` |
+| **Claude Code** | Planned | `~/.claude/skills/goal-enforcement/` |
+| **Codex** | Planned | `~/.codex/skills/` or `~/.agents/skills/` |
+| **Gemini CLI** | Planned | `~/.gemini/skills/` |
+| **Antigravity** | Not available (no stop hook) | `~/.gemini/antigravity/skills/` |
+| **Windsurf** | Not available | `~/.codeium/windsurf/skills/` |
+| **Pi / OpenCode** | Extension/plugin TBD | `.agents/skills/` |
+
+See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md) for tiers, Pi, OpenCode, and Antigravity details.
 
 ## Commands
 
 | Command | Description |
 |---------|-------------|
-| `goal set --session-id <id> "<text>"` | Create or replace the session goal |
-| `goal edit --session-id <id> "<text>"` | Update text on an active goal |
-| `goal complete --session-id <id>` | Mark complete (allows stop) |
-| `goal clear --session-id <id>` | Remove the session goal |
-| `goal status --session-id <id>` | Show current goal |
+| `goal set "<text>"` | Create or replace the session goal (hooks add `--session-id`) |
+| `goal edit "<text>"` | Update an active goal |
+| `goal complete` | Mark complete (allows stop) |
+| `goal clear` | Remove the goal without completing |
+| `goal status` | Show current goal |
 
-In Cursor agent shells, `--session-id` is injected by the hook; agents should run `goal set "..."` without the flag.
+With hooks installed, agents should omit `--session-id` on shell commands.
 
-## Hooks
+## Hooks (Cursor)
 
 | Hook | Command |
 |------|---------|
 | `preToolUse` (Shell) | `goal hook pre-tool-use` |
 | `stop` | `goal hook stop` |
 
-See [hooks.example.json](./hooks.example.json).
+Example: [hooks.example.json](./hooks.example.json).
 
-## User rule (optional)
+## Tell your agent
 
-Add to Cursor user rules:
+Point it at this repo and ask it to run install:
 
-> For sustained agent work, tell the agent to `goal set` at the start and not finish until `goal complete`.
+> Clone https://github.com/brandongalang/goal-at-home and run `./install.sh` for Cursor, or `npx skills add brandongalang/goal-at-home --skill goal-enforcement -g -y` for skill-only. Follow AGENTS.md.
+
+Optional Cursor user rule:
+
+> For sustained agent work, run `goal set` at the start and `goal complete` only when every requirement is satisfied.
 
 ## License
 

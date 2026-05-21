@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/brandongalang/cursor-goal/internal/store"
+	"github.com/brandongalang/goal-at-home/internal/store"
 )
 
 func TestInjectSessionID(t *testing.T) {

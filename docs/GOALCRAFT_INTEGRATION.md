@@ -28,7 +28,7 @@ No external Goalcraft install required. No `/goal` prefix. No Codex `create_goal
 | `skill/goal-enforcement/SKILL.md` | Enforcement workflow |
 | `scripts/validate_goal_objective.py` | Length check before `goal set` |
 
-`./install.sh` copies both skills to `~/.cursor/skills/`.
+`goal install` copies both skills to the agent’s skills directory.
 
 ## Validator limits (same as Codex `/goal`)
 
@@ -62,7 +62,7 @@ Crafting stays in the **skill** (LLM). The CLI only validates and persists.
 
 ## Codex users
 
-If someone also uses Codex native `/goal`, they can keep upstream Goalcraft installed separately. goal-at-home does not conflict; **goalcraft-at-home** is the path for enforced Cursor (and future hook adapters).
+If someone also uses Codex native `/goal`, they can keep upstream Goalcraft installed separately. goal-at-home does not conflict; **goalcraft-at-home** is the path for enforced sessions on Cursor and other hook-capable agents (see [CUSTOM_AGENT_SETUP.md](./CUSTOM_AGENT_SETUP.md)).
 
 ## Success criteria
 

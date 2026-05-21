@@ -34,7 +34,11 @@ func Dir() (string, error) {
 	if err != nil {
 		return "", err
 	}
-	dir := filepath.Join(home, ".cursor", "goals")
+	base := filepath.Join(home, ".cursor")
+	if v := os.Getenv("GOAL_HOME"); v != "" {
+		base = v
+	}
+	dir := filepath.Join(base, "goals")
 	if err := os.MkdirAll(dir, 0o755); err != nil {
 		return "", err
 	}

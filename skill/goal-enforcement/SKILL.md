@@ -3,14 +3,14 @@ name: goal-enforcement
 description: >-
   Session goal enforcement for coding agents. Use when the user asks for sustained
   work that must not stop until explicitly finished. Requires goal-at-home CLI and
-  hooks (run ./install.sh); this skill alone does not enforce stopping.
+  hooks (run goal install); this skill alone does not enforce stopping.
 ---
 
 # Session goal enforcement
 
 This workspace uses **goal-at-home**: the agent cannot end sustained work while a goal is **active** unless it runs `goal complete`. Enforcement comes from hooks, not this file alone.
 
-If `goal` or hooks are missing, run `./install.sh` from https://github.com/brandongalang/goal-at-home (see AGENTS.md).
+If `goal` or hooks are missing, run `goal install --agent <cursor|claude|codex|gemini>` from https://github.com/brandongalang/goal-at-home
 
 ## Before goal set
 

@@ -99,4 +99,4 @@ Report validated length, e.g. `Objective length: 2,914 characters`.
 1. **goalcraft-at-home** (this skill) — craft the objective.
 2. **goal-enforcement** — `goal set`, work, `goal complete`.
 
-Requires goal-at-home installed (`./install.sh`): CLI + hooks + both skills.
+Requires goal-at-home installed (`goal install`): CLI + hooks + both skills.

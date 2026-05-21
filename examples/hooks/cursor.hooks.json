@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "hooks": {
+    "preToolUse": [
+      {
+        "command": "goal hook pre-tool-use",
+        "matcher": "Shell"
+      }
+    ],
+    "stop": [
+      {
+        "command": "goal hook stop",
+        "loop_limit": 10
+      }
+    ]
+  }
+}

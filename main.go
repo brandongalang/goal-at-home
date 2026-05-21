@@ -6,6 +6,7 @@ import (
 	"strings"
 
 	"github.com/brandongalang/goal-at-home/internal/hooks"
+	"github.com/brandongalang/goal-at-home/internal/install"
 	"github.com/brandongalang/goal-at-home/internal/store"
 )
 
@@ -34,6 +35,11 @@ func main() {
 			fmt.Fprintf(os.Stderr, "hook error: %v\n", err)
 			os.Exit(1)
 		}
+	case "install":
+		if err := runInstall(os.Args[2:]); err != nil {
+			fmt.Fprintf(os.Stderr, "error: %v\n", err)
+			os.Exit(1)
+		}
 	case "set", "edit", "complete", "clear", "status":
 		if err := runCommand(os.Args[1], os.Args[2:]); err != nil {
 			fmt.Fprintf(os.Stderr, "error: %v\n", err)
@@ -54,11 +60,95 @@ Usage:
   goal complete --session-id <id>
   goal clear  --session-id <id>
   goal status --session-id <id>
-  goal hook pre-tool-use   (preToolUse hook; reads JSON from stdin)
-  goal hook stop           (stop hook; reads JSON from stdin)
+  goal hook pre-tool-use   (pre-tool hook; Cursor/Claude/Codex/Gemini JSON on stdin)
+  goal hook stop           (stop hook; same agents)
 
-Install: ./install.sh
-Docs:    https://github.com/brandongalang/goal-at-home
+  goal install --agent <cursor|claude|codex|gemini|all>
+  goal install list
+
+Docs: https://github.com/brandongalang/goal-at-home
+`)
+}
+
+func runInstall(args []string) error {
+	if len(args) == 1 && args[0] == "list" {
+		for _, a := range install.AllAgents() {
+			fmt.Println(a)
+		}
+		return nil
+	}
+	var agents []install.Agent
+	dryRun := false
+	skipInstructions := false
+	installDir := ""
+	repo := ""
+	for i := 0; i < len(args); i++ {
+		switch args[i] {
+		case "--agent", "-a":
+			if i+1 >= len(args) {
+				return fmt.Errorf("--agent requires a value")
+			}
+			i++
+			parsed, err := install.ParseAgents([]string{args[i]})
+			if err != nil {
+				return err
+			}
+			agents = append(agents, parsed...)
+		case "--bin-dir":
+			if i+1 >= len(args) {
+				return fmt.Errorf("--bin-dir requires a value")
+			}
+			i++
+			installDir = args[i]
+		case "--repo":
+			if i+1 >= len(args) {
+				return fmt.Errorf("--repo requires a value")
+			}
+			i++
+			repo = args[i]
+		case "--dry-run":
+			dryRun = true
+		case "--skip-instructions":
+			skipInstructions = true
+		case "help", "-h", "--help":
+			printInstallUsage()
+			return nil
+		default:
+			return fmt.Errorf("unknown install flag: %s", args[i])
+		}
+	}
+	if len(agents) == 0 {
+		printInstallUsage()
+		return fmt.Errorf("specify --agent (e.g. goal install --agent cursor)")
+	}
+	return install.Run(install.Options{
+		RepoRoot:         repo,
+		InstallDir:       installDir,
+		Agents:           agents,
+		DryRun:           dryRun,
+		SkipInstructions: skipInstructions,
+	})
+}
+
+func printInstallUsage() {
+	fmt.Fprintf(os.Stderr, `goal install — build CLI and wire hooks + skills
+
+Usage:
+  goal install --agent cursor     (~/.cursor: hooks, skills, AGENTS.md)
+  goal install --agent claude     (~/.claude: hooks, skills, CLAUDE.md)
+  goal install --agent codex      (~/.codex: hooks, skills, AGENTS.md)
+  goal install --agent gemini     (~/.gemini: hooks, skills, GEMINI.md)
+  goal install --agent all
+  goal install list
+
+First install from repo clone:  go run . install --agent cursor
+
+Options:
+  --bin-dir <path>        Install binary (default: ~/.local/bin/goal)
+  --repo <path>           Repo root (default: find go.mod from cwd)
+  --dry-run               Print actions without writing
+  --skip-instructions     Do not append to global AGENTS.md / CLAUDE.md / GEMINI.md
+
 `)
 }
 

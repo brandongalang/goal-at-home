@@ -8,14 +8,16 @@ Goal-at-home is **CLI + hooks + skill**. Copying only `SKILL.md` does not enforc
 2. **Stop / end-of-turn** — reprompt or block when a goal is still `active`
 3. **`goal` binary** on PATH
 
-## Tier 1 — Supported (full install)
+## Tier 1 — Supported (CLI + hooks)
 
 | Agent | Install | Pre-tool | Stop | Status |
 |-------|---------|----------|------|--------|
-| [Cursor](https://cursor.com) | `./install.sh` | `preToolUse` (Shell) | `stop` → `followup_message` | **Available** |
-| [Claude Code](https://code.claude.com) | `goal install` (planned) | `PreToolUse` (Bash) | `Stop` → `decision: block` | Planned |
-| [Codex CLI](https://developers.openai.com/codex) | `goal install` (planned) | `PreToolUse` (Bash) | `Stop` | Planned |
-| [Gemini CLI](https://geminicli.com) | `goal install` (planned) | `BeforeTool` | `AfterAgent` retry | Planned |
+| [Cursor](https://cursor.com) | `goal install --agent cursor` | `preToolUse` (Shell) | `stop` | **Available** |
+| [Claude Code](https://code.claude.com) | `goal install --agent claude` | `PreToolUse` (Bash) | `Stop` | **Available** |
+| [Codex CLI](https://developers.openai.com/codex) | `goal install --agent codex` | `PreToolUse` (Bash) | `Stop` | **Available** |
+| [Gemini CLI](https://geminicli.com) | `goal install --agent gemini` | `BeforeTool` (`run_shell_command`) | `AfterAgent` | **Available** |
+
+`goal hook` detects wire format from `hook_event_name` or `GOAL_HOOK_AGENT` (`cursor`, `claude`, `codex`, `gemini`). Agent setup prompt: [prompts/configure-agent-hooks.md](./prompts/configure-agent-hooks.md).
 
 ## Tier 2 — Possible via native extension (not shell hooks)
 
@@ -36,12 +38,12 @@ These agents lack a Cursor-style stop reprompt we can wire today:
 | [Windsurf](https://windsurf.com) | Cascade hooks; no turn-level stop reprompt |
 | GitHub Copilot, Continue, Aider, most assistants | No compatible hook surface |
 
-Do not point users at goal-at-home for these until an adapter exists.
+Do not point users at goal-at-home for these until the agent exposes stop/reprompt hooks (or a native extension path).
 
 ## Compared to built-in `/goal`
 
 Claude Code and Codex ship native goal/loop features. Goal-at-home targets:
 
 - File-backed objectives (`goal set` / `goal complete`)
-- Same CLI across agents (as adapters ship)
+- Same CLI across hook-capable agents (see [CUSTOM_AGENT_SETUP.md](./CUSTOM_AGENT_SETUP.md))
 - Deterministic enforcement via hooks

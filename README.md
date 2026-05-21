@@ -2,6 +2,8 @@
 
 Session goal enforcement for coding agents. Set a goal at the start of sustained work; the agent cannot end the session until it runs `goal complete` — enforced by the **CLI + hooks**, not prompts alone.
 
+**Adapts the [Goalcraft](https://github.com/grp06/goalcraft) pattern for better goals** — evidence-based objectives (Destination, Verification, Done/stop, etc.) via bundled **goalcraft-at-home**, then enforced with `goal set` and stop hooks. See [integration](./docs/GOALCRAFT_INTEGRATION.md) · [attribution](./docs/GOALCRAFT_ATTRIBUTION.md).
+
 **Repository:** https://github.com/brandongalang/goal-at-home
 
 Agents: read [AGENTS.md](./AGENTS.md) first.
@@ -18,17 +20,27 @@ User **Stop** leaves the goal **active** so the next turn resumes enforcement.
 
 Installing only a skill file (instructions without the binary and hooks) does **not** provide enforcement — the agent can ignore it. Use the full install below.
 
-## Install (Cursor)
+## Install
 
-Requires `go`, `jq`, and `~/.local/bin` on your `PATH`.
+Requires `go` and `~/.local/bin` on your `PATH`.
 
 ```bash
 git clone https://github.com/brandongalang/goal-at-home.git
 cd goal-at-home
-./install.sh
+go run . install --agent cursor   # first time from clone; then: goal install --agent cursor
 ```
 
-Restart Cursor after install.
+Other agents:
+
+```bash
+goal install --agent claude    # Claude Code
+goal install --agent codex     # Codex CLI
+goal install --agent gemini    # Gemini CLI
+goal install --agent all       # every supported agent
+goal install list              # show agent names
+```
+
+`goal install` builds the binary, merges hooks, copies skills, and appends a short **Session goals** block to the agent’s global instructions file (`AGENTS.md`, `CLAUDE.md`, or `GEMINI.md`). No `jq` required. Restart the agent after install.
 
 This installs:
 
@@ -40,17 +52,20 @@ This installs:
 
 ## Supported agents
 
-| Agent | Status |
-|-------|--------|
-| **Cursor** | `./install.sh` today |
-| **Claude Code, Codex, Gemini CLI** | Hook adapters planned |
-| **Antigravity, Windsurf, Copilot, Pi, OpenCode, …** | Not supported until we ship an adapter with CLI + stop enforcement |
+| Agent | Install command |
+|-------|-----------------|
+| **Cursor** | `goal install --agent cursor` |
+| **Claude Code** | `goal install --agent claude` |
+| **Codex CLI** | `goal install --agent codex` |
+| **Gemini CLI** | `goal install --agent gemini` |
+| **All of the above** | `goal install --agent all` |
+| **Antigravity, Windsurf, Copilot, …** | Not supported — no turn-end stop hook to wire |
 
-See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md).
+See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md). For troubleshooting or custom paths, [docs/CUSTOM_AGENT_SETUP.md](./docs/CUSTOM_AGENT_SETUP.md).
 
 ## Goalcraft at home (bundled)
 
-This repo includes **goalcraft-at-home** — an adapted [Goalcraft](https://github.com/grp06/goalcraft) workflow for `goal set` (not Codex `/goal`). `./install.sh` installs both **goalcraft-at-home** (shape the objective) and **goal-enforcement** (enforce it).
+This repo includes **goalcraft-at-home** — an adapted [Goalcraft](https://github.com/grp06/goalcraft) workflow for `goal set` (not Codex `/goal`). `goal install` installs both skills plus hooks and global agent instructions.
 
 Details: [docs/GOALCRAFT_INTEGRATION.md](./docs/GOALCRAFT_INTEGRATION.md) · [attribution](./docs/GOALCRAFT_ATTRIBUTION.md)
 
@@ -77,7 +92,11 @@ Example: [hooks.example.json](./hooks.example.json).
 
 ## Tell your agent
 
-> Clone https://github.com/brandongalang/goal-at-home, run `./install.sh`, restart Cursor. Follow AGENTS.md. Do not use skill-only install — enforcement requires the CLI and hooks.
+**Cursor:** Clone https://github.com/brandongalang/goal-at-home, run `goal install --agent cursor`, restart Cursor.
+
+**Other agents:** `goal install --agent <name>`. If install fails on an unusual setup, use [docs/prompts/configure-agent-hooks.md](./docs/prompts/configure-agent-hooks.md).
+
+Do not use skill-only install — enforcement requires the CLI and hooks.
 
 Optional Cursor user rule:
 

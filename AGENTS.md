@@ -6,25 +6,26 @@ Repository: https://github.com/brandongalang/goal-at-home
 
 ## Install (Cursor)
 
-Run from the repo root (requires `go`, `jq`, and `~/.local/bin` on PATH):
+From the repo root (requires `go` and `~/.local/bin` on PATH):
 
 ```bash
 git clone https://github.com/brandongalang/goal-at-home.git
 cd goal-at-home
-./install.sh
+go run . install --agent cursor   # first time; later: goal install --agent cursor
 ```
 
 Then **restart Cursor** so hooks reload.
 
-What this installs:
+What `goal install --agent cursor` installs:
 
 - `~/.local/bin/goal` — CLI
 - `~/.cursor/hooks.json` — merged `preToolUse` + `stop` hooks (existing hooks preserved)
 - `~/.cursor/skills/goalcraft-at-home/SKILL.md` — craft objectives (adapted Goalcraft)
 - `~/.cursor/skills/goal-enforcement/SKILL.md` — enforce until `goal complete`
 - `~/.cursor/goals/` — per-session goal state
+- `~/.cursor/AGENTS.md` — appends a marked **Session goals** section (idempotent; use `--skip-instructions` to omit)
 
-Do **not** install only skills without `./install.sh` — that skips the CLI and hooks.
+Do **not** install only skills without `goal install` — that skips the CLI and hooks.
 
 ## Workflow
 
@@ -61,9 +62,11 @@ goal clear      # user cancelled or goal should be dropped
 
 | Agent | Supported? |
 |-------|------------|
-| Cursor | Yes — `./install.sh` |
-| Claude Code, Codex, Gemini CLI | Planned (`goal install` adapters) |
+| Cursor | Yes — `goal install --agent cursor` |
+| Claude Code, Codex, Gemini CLI | Yes — `goal install --agent claude` / `codex` / `gemini` |
 | Antigravity, Windsurf, Copilot, Pi, OpenCode | No — no stop-hook enforcement yet |
+
+**Configure a hook-capable agent:** follow [docs/CUSTOM_AGENT_SETUP.md](./docs/CUSTOM_AGENT_SETUP.md) or run the prompt in [docs/prompts/configure-agent-hooks.md](./docs/prompts/configure-agent-hooks.md).
 
 See [docs/SUPPORTED_AGENTS.md](./docs/SUPPORTED_AGENTS.md).
 
